@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AI Career Compass</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+    <header>
+        <h1><a href="/">AI Career Compass</a></h1>
+        <nav>
+            <a href="/">🏠 Home</a> |
+            <a href="/saved">💾 Saved Careers</a>
+        </nav>
+        <hr />
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <hr />
+        <p>© 2025 AI Career Compass | Made by Vanshika Madireddi</p>
+    </footer>
+
+    <!-- JS for Save Feature (shared across pages) -->
+    <script>
+      function saveCareer(role) {
+        let saved = JSON.parse(localStorage.getItem("savedCareers") || "[]");
+        if (!saved.includes(role)) {
+          saved.push(role);
+          localStorage.setItem("savedCareers", JSON.stringify(saved));
+          alert(role + " saved!");
+        } else {
+          alert(role + " is already saved.");
+        }
+      }
+
+      function displaySavedCareers() {
+        const saved = JSON.parse(localStorage.getItem("savedCareers") || "[]");
+        const list = document.getElementById("saved-list");
+
+        if (list) {
+          if (saved.length === 0) {
+            list.innerHTML = "<li>No saved careers yet 😔</li>";
+          } else {
+            saved.forEach(role => {
+              const li = document.createElement("li");
+              li.innerHTML = `<a href="/career/${encodeURIComponent(role)}">${role}</a>`;
+              list.appendChild(li);
+            });
+          }
+        }
+      }
+    </script>
+</body>
+</html>

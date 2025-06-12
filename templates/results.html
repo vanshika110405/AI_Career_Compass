@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+
+    {% if results %}
+      <h2>🔍 Found {{ results|length }} careers matching "{{ query }}"</h2>
+      <ul>
+        {% for career in results %}
+          <li>
+            <h3>
+              <a href="{{ url_for('career_detail', role=career['role']) }}">{{ career['role'] }}</a>
+            </h3>
+            <p><strong>Description:</strong> {{ career['description'] }}</p>
+            <p><strong>Skills:</strong> {{ career['required_skills'] }}</p>
+            <p><strong>Domain:</strong> {{ career['domain_industries'] }}</p>
+
+            <!-- Save Button -->
+            <button onclick="saveCareer('{{ career['role'] }}')">💾 Save</button>
+            <hr />
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h3>❌ No careers found for "{{ query }}"</h3>
+    {% endif %}
+
+  </div> <!-- ✅ this was missing -->
+
+  <script>
+    function saveCareer(role) {
+      let saved = JSON.parse(localStorage.getItem("savedCareers") || "[]");
+      if (!saved.includes(role)) {
+        saved.push(role);
+        localStorage.setItem("savedCareers", JSON.stringify(saved));
+        alert(role + " saved!");
+      } else {
+        alert(role + " is already saved.");
+      }
+    }
+  </script>
+{% endblock %}

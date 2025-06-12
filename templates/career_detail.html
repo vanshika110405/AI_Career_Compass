@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ career['role'] }}</h2>
+<p>{{ career['description'] }}</p>
+
+<h3>Required Skills:</h3>
+<p>{{ career['required_skills'] }}</p>
+
+<h3>Education Level:</h3>
+<p>{{ career['education_level'] }}</p>
+
+<h3>Tools & Technologies:</h3>
+<p>{{ career['tools_technologies'] }}</p>
+
+<h3>Learning Path:</h3>
+<ul>
+    {% for step in career['learning_path'].split('|') %}
+    <li>{{ step }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Personality Traits:</h3>
+<p>{{ career['personality_traits'] }}</p>
+
+<h3>Industries:</h3>
+<p>{{ career['domain_industries'] }}</p>
+
+<h3>Average Salary Range:</h3>
+<p>{{ career['average_salary_range'] }}</p>
+
+<h3>Job Demand Level:</h3>
+<p>{{ career['job_demand_level'] }}</p>
+
+<h3>Career Growth Score:</h3>
+<p>{{ career['career_growth_score'] }}</p>
+
+<h3>Related Roles:</h3>
+<p>{{ career['related_roles'] }}</p>
+
+<!-- 💾 Save button -->
+<button onclick="saveCareer('{{ career['role'] }}')">💾 Save this Career</button>
+</div>
+
+<script>
+function saveCareer(role) {
+    let saved = JSON.parse(localStorage.getItem("savedCareers") || "[]");
+    if (!saved.includes(role)) {
+        saved.push(role);
+        localStorage.setItem("savedCareers", JSON.stringify(saved));
+        alert(role + " has been saved!");
+    } else {
+        alert(role + " is already in your saved careers.");
+    }
+    }
+</script>
+
+
+<a href="{{ url_for('index') }}">Back to search</a>
+{% endblock %}

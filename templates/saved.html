@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2>⭐ Saved Careers</h2>
+    <ul id="savedCareersList"></ul>
+  </div>
+
+  <script>
+    const saved = JSON.parse(localStorage.getItem("savedCareers") || "[]");
+    const list = document.getElementById("savedCareersList");
+
+    if (saved.length === 0) {
+      list.innerHTML = "<li>No saved careers yet.</li>";
+    } else {
+      saved.forEach(role => {
+        const encodedRole = encodeURIComponent(role);
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <a href="/career/${encodedRole}">${role}</a>
+          <button onclick="removeCareer('${role}')">❌ Remove</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function removeCareer(roleToRemove) {
+      let saved = JSON.parse(localStorage.getItem("savedCareers") || "[]");
+      saved = saved.filter(role => role !== roleToRemove);
+      localStorage.setItem("savedCareers", JSON.stringify(saved));
+      location.reload();
+    }
+  </script>
+{% endblock %}

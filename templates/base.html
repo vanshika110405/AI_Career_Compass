@@ -8,10 +8,18 @@
 <body>
     <header>
         <h1><a href="/">AI Career Compass</a></h1>
-        <nav>
-            <a href="/">🏠 Home</a> |
-            <a href="/saved">💾 Saved Careers</a>
-        </nav>
+        <nav style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <a href="/">🏠 Home</a> |
+        <a href="/saved">💾 Saved Careers</a>
+    </div>
+    <div>
+        <a href="{{ url_for('visualizations') }}">
+            <button style="padding: 5px 10px;">📊 Visualizations</button>
+        </a>
+    </div>
+</nav>
+
         <hr />
     </header>
 

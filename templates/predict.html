@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: auto; padding: 20px;">
+    <h2 style="text-align: center; margin-bottom: 20px;">🔮 Predict Your AI Career</h2>
+
+    <form method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+        <label for="skills_input">Enter your skills or interests:</label>
+        <textarea name="skills_input" rows="4" cols="50" placeholder="e.g. Python, Machine Learning, NLP, Statistics" style="padding: 10px;"></textarea>
+        <button type="submit" style="width: fit-content; padding: 8px 16px;">Predict Career</button>
+    </form>
+
+    {% if recommended_career %}
+    <div style="margin-top: 30px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
+        <h3>🎯 Suggested Career: <strong>{{ recommended_career['role'] }}</strong></h3>
+        <p><strong>Job Demand:</strong> {{ recommended_career['job_demand_level'] }}</p>
+        <p><strong>Career Growth Score:</strong> {{ recommended_career['career_growth_score'] }}</p>
+        <p><strong>Required Skills:</strong> {{ recommended_career['required_skills'] }}</p>
+        <a href="{{ url_for('career_detail', role=recommended_career['role']) }}">
+            <button style="margin-top: 10px;">View Career Details</button>
+        </a>
+    </div>
+    {% elif predicted_role %}
+    <div style="margin-top: 30px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
+        <h3>🎯 Suggested Career: <strong>{{ predicted_role }}</strong></h3>
+        <a href="{{ url_for('career_detail', role=predicted_role) }}">
+            <button style="margin-top: 10px;">View Career Details</button>
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

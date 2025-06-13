@@ -8,8 +8,12 @@ import pandas as pd
 import io
 import base64
 import os
+import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 app = Flask(__name__)
+
+model, tfidf, le = joblib.load('model/career_predictor.pkl')
 
 # Loading dataset once on startup
 careers_data = load_careers("data/ai_career_compass_dataset.csv")
@@ -84,8 +88,6 @@ def visualizations():
         # Calculate midpoint only for valid numeric rows
         df['salary_midpoint'] = df[['salary_low', 'salary_high']].mean(axis=1)
 
-
-
     # 1. Line Chart – Career Growth Score by Role
     plt.figure(figsize=(12, 6))
     df_sorted = df.sort_values(by="career_growth_score")
@@ -148,6 +150,31 @@ def visualizations():
     plt.close()
 
     return render_template("visualizations.html", plots=plots)
+
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    predicted_role = None
+    recommended_career = None
+
+    if request.method == 'POST':
+        skills_input = request.form.get('skills_input')
+        if skills_input:
+            combined_input = skills_input
+            X_input = tfidf.transform([combined_input])
+            y_pred = model.predict(X_input)
+            predicted_role = le.inverse_transform(y_pred)[0]
+
+            # Match predicted role to data for details
+            for c in careers_data:
+                if c['role'].lower() == predicted_role.lower():
+                    recommended_career = c
+                    break
+
+    return render_template('predict.html',
+                           predicted_role=predicted_role,
+                           recommended_career=recommended_career)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

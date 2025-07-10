@@ -71,21 +71,21 @@ def visualizations():
 
     plots = []
 
-    # Convert career_growth_score to numeric
+    # Converting career_growth_score to numeric
     if 'career_growth_score' in df.columns:
         df['career_growth_score'] = pd.to_numeric(df['career_growth_score'], errors='coerce')
 
-    # Convert salary range to numeric midpoint safely
+    # Converting salary range to numeric midpoint safely
     if 'average_salary_range' in df.columns:
         # Remove $ and commas
         df['average_salary_range_clean'] = df['average_salary_range'].str.replace(r'[\$,]', '', regex=True)
 
-        # Extract using regex and fill missing with NaN
+        # Extracting using regex and fill missing with NaN
         salary_extract = df['average_salary_range_clean'].str.extract(r'(?P<low>\d+)\s*-\s*(?P<high>\d+)')
         df['salary_low'] = pd.to_numeric(salary_extract['low'], errors='coerce')
         df['salary_high'] = pd.to_numeric(salary_extract['high'], errors='coerce')
 
-        # Calculate midpoint only for valid numeric rows
+        # Calculating midpoint only for valid numeric rows
         df['salary_midpoint'] = df[['salary_low', 'salary_high']].mean(axis=1)
 
     # 1. Line Chart – Career Growth Score by Role
@@ -164,7 +164,7 @@ def predict():
             y_pred = model.predict(X_input)
             predicted_role = le.inverse_transform(y_pred)[0]
 
-            # Match predicted role to data for details
+            # Matching predicted role to data for details
             for c in careers_data:
                 if c['role'].lower() == predicted_role.lower():
                     recommended_career = c
